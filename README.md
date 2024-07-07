@@ -9,6 +9,12 @@
 * [Retrofit2](https://square.github.io/retrofit/) for network data
 * [View Binding](https://developer.android.com/topic/libraries/view-binding) for simplifies interactions with views.
 * Location permissions
+
+## Screenshoot
+
+<p float="left">
+  <img src="https://github.com/bedirhanssaglam/weather-app/assets/105479937/a971efed-66f7-444f-9c7c-866b64a69e58" width="300" />
+</p>
   
 ## Architecture
 
