@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="location_provider_turn_off_warning">Your location provider is turned off. Please turn it on.</string>
+    <string name="denied_location_permission_warning">You have denied location permission. Please enable them as it is
+        mandatory for the app to work.
+    </string>
+    <string name="please_wait">Please wait…</string>
+    <string name="image_contentDescription">image</string>
+    <string name="miles_per_hour">miles/hour</string>
+    <string name="refresh">Refresh</string>
+    <string name="dont_have_location_permission_warning">It looks like you have turned off permissions required for this
+        feature. It can be enabled under the Application Settings.
+    </string>
+    <string name="go_to_the_settings">Go to the Settings</string>
+    <string name="cancel">Cancel</string>
+</resources>

@@ -1,0 +1,8 @@
+package com.android.weatherapp.domain.model
+
+import java.io.Serializable
+
+data class Coord(
+    val lon: Double,
+    val lat: Double
+) : Serializable
