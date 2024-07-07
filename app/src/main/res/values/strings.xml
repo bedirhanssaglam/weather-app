@@ -13,4 +13,7 @@
     </string>
     <string name="go_to_the_settings">Go to the Settings</string>
     <string name="cancel">Cancel</string>
+    <string name="humidity">Humidity</string>
+    <string name="rain">Rain</string>
+    <string name="today">Today</string>
 </resources>

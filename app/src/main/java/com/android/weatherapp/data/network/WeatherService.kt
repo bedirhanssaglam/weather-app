@@ -1,6 +1,6 @@
 package com.android.weatherapp.data.network
 
-import com.android.weatherapp.presentation.utils.AppConstants
+import com.android.weatherapp.presentation.utils.constants.AppConstants
 import com.android.weatherapp.domain.model.WeatherResponse
 import retrofit2.Call
 import retrofit2.http.GET

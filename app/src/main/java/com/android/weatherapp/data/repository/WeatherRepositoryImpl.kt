@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.android.weatherapp.data.network.WeatherService
 import com.android.weatherapp.domain.model.WeatherResponse
 import com.android.weatherapp.domain.repository.WeatherRepository
-import com.android.weatherapp.presentation.utils.AppConstants
+import com.android.weatherapp.presentation.utils.constants.AppConstants
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

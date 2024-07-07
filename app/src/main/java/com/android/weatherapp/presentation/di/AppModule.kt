@@ -3,7 +3,7 @@ package com.android.weatherapp.presentation.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.android.weatherapp.data.network.WeatherService
-import com.android.weatherapp.presentation.utils.AppConstants
+import com.android.weatherapp.presentation.utils.constants.AppConstants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module

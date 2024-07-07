@@ -3,14 +3,10 @@ package com.android.weatherapp.presentation.view
 import android.Manifest
 import android.app.Dialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -19,9 +15,10 @@ import com.android.weatherapp.R
 import com.android.weatherapp.databinding.ActivityMainBinding
 import com.android.weatherapp.domain.model.WeatherResponse
 import com.android.weatherapp.presentation.extensions.showToast
-import com.android.weatherapp.presentation.utils.AppConstants
+import com.android.weatherapp.presentation.utils.constants.AppConstants
 import com.android.weatherapp.presentation.utils.DateUtils
 import com.android.weatherapp.presentation.utils.LocationUtils
+import com.android.weatherapp.presentation.utils.enums.LoadingState
 import com.android.weatherapp.presentation.utils.getWeatherIconDrawable
 import com.android.weatherapp.presentation.viewmodel.WeatherViewModel
 import com.karumi.dexter.Dexter
@@ -30,22 +27,22 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private var binding: ActivityMainBinding? = null
-
+    private lateinit var binding: ActivityMainBinding
     private val viewModel: WeatherViewModel by viewModels()
+
+    private var progressDialog: Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
+
         setupLocationPermissions()
         observeWeatherData()
-        setupOptionsMenu()
+        observeLoadingState()
     }
 
     private fun setupLocationPermissions() {
@@ -55,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             checkLocationPermissions()
         }
-
     }
 
     private fun showLocationSettingsDialog() {
@@ -120,10 +116,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeLoadingState() {
+        viewModel.loadingState.observe(this) { state ->
+            when (state) {
+                LoadingState.BUSY -> showProgressDialog()
+                LoadingState.IDLE -> progressDialog?.dismiss()
+                else -> {
+                    return@observe
+                }
+            }
+        }
+    }
+
     private fun setupUi(weatherResponse: WeatherResponse) {
         for (i: Int in weatherResponse.weather.indices) {
-            binding!!.apply {
-                tvMain.text = weatherResponse.weather[i].main
+            binding.apply {
                 tvMainDescription.text = weatherResponse.weather[i].description
                 tvTemp.text = "${weatherResponse.main.temp}°C"
 
@@ -131,9 +138,9 @@ class MainActivity : AppCompatActivity() {
                 tvMin.text = "${weatherResponse.main.temp_min} min"
                 tvMax.text = "${weatherResponse.main.temp_max} max"
                 tvSpeed.text = weatherResponse.wind.speed.toString()
-                tvName.text = weatherResponse.name
-                tvCountry.text = weatherResponse.sys.country
+                tvName.text = "${weatherResponse.name}, ${weatherResponse.sys.country}"
 
+                dateText.text = DateUtils.formatToday()
                 tvSunriseTime.text = DateUtils.formatUnixTime(weatherResponse.sys.sunrise)
                 tvSunsetTime.text = DateUtils.formatUnixTime(weatherResponse.sys.sunset)
 
@@ -143,30 +150,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupOptionsMenu() {
-        viewModel.weather.observe(this) { weatherResponse ->
-            weatherResponse?.let { setupUi(it) }
+    private fun showProgressDialog() {
+        progressDialog = Dialog(this).apply {
+            setContentView(R.layout.progress_dialog)
+            show()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_refresh -> {
-                viewModel.requestLocationData(this)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
     }
 }
